@@ -2,6 +2,9 @@
 #Boa:Frame:Frame1
 
 import wx
+import datetime
+import time
+from core import get_sun
 
 def create(parent):
     return Frame1(parent)
@@ -29,6 +32,8 @@ class Frame1(wx.Frame):
               label=u'\u5f00\u59cb\u8ba1\u7b97', name='button1',
               parent=self.panel1, pos=wx.Point(288, 232), size=wx.Size(136, 32),
               style=0)
+        self.button1.Bind(wx.EVT_BUTTON, self.OnButton1Button,
+              id=wxID_FRAME1BUTTON1)
 
         self.staticText1 = wx.StaticText(id=wxID_FRAME1STATICTEXT1,
               label=u'\u89c2\u6d4b\u70b9\u7ecf\u5ea6\uff1a', name='staticText1',
@@ -42,11 +47,11 @@ class Frame1(wx.Frame):
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
               parent=self.panel1, pos=wx.Point(113, 111), size=wx.Size(100, 21),
-              style=0, value=u'')
+              style=0, value=u'110\xb018\u203221\u2033')
 
         self.textCtrl2 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL2, name='textCtrl2',
               parent=self.panel1, pos=wx.Point(113, 159), size=wx.Size(100, 21),
-              style=0, value=u'')
+              style=0, value=u'25\xb019\u203241\u2033')
 
         self.choice1 = wx.Choice(choices=["E", "W"], id=wxID_FRAME1CHOICE1,
               name='choice1', parent=self.panel1, pos=wx.Point(223, 111),
@@ -100,3 +105,36 @@ class Frame1(wx.Frame):
 
     def __init__(self, parent):
         self._init_ctrls(parent)
+
+    def OnButton1Button(self, event):
+        E = self.textCtrl1.GetValue()
+        N = self.textCtrl2.GetValue()
+        output = "%s%s, %s%s, " % (E, self.choice1.GetLabel(), N, self.choice2.GetLabel())
+        if self.choice1.GetLabel() == "W":
+            E = "-" + E
+        if self.choice2.GetLabel() == "S":
+            N = "-" + N
+        now = datetime.datetime.now()
+        show_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        a, c = get_sun(E, N, now)
+        
+        self.textCtrl3.SetValue(a)
+        self.textCtrl4.SetValue(c)
+        self.staticText3.SetLabel("--- " + show_time + " -->") 
+        
+        output += show_time
+        output += " : %s, %s\n" % (a, c)
+        output = output.encode("gbk")
+        open("sun.log", "a").write(output)
+        print output
+        
+        
+        if self.n:
+            wx.MessageBox(u"测试版只可进行一次计算 若要再次计算请重新开启软件")
+            self.Destroy()
+        self.n += 1
+                    
+        event.Skip()
+    
+    n = 0
+        
