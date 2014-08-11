@@ -37,12 +37,12 @@ class Frame1(wx.Frame):
 
         self.staticText1 = wx.StaticText(id=wxID_FRAME1STATICTEXT1,
               label=u'\u89c2\u6d4b\u70b9\u7ecf\u5ea6\uff1a', name='staticText1',
-              parent=self.panel1, pos=wx.Point(41, 115), size=wx.Size(72, 13),
+              parent=self.panel1, pos=wx.Point(41, 115), size=wx.Size(72, 21),
               style=0)
 
         self.staticText2 = wx.StaticText(id=wxID_FRAME1STATICTEXT2,
               label=u'\u89c2\u6d4b\u70b9\u7eac\u5ea6\uff1a', name='staticText2',
-              parent=self.panel1, pos=wx.Point(41, 163), size=wx.Size(72, 13),
+              parent=self.panel1, pos=wx.Point(41, 163), size=wx.Size(72, 21),
               style=0)
 
         self.textCtrl1 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL1, name='textCtrl1',
@@ -68,17 +68,17 @@ class Frame1(wx.Frame):
 
         self.staticText3 = wx.StaticText(id=wxID_FRAME1STATICTEXT3,
               label=u'-------------------------------->', name='staticText3',
-              parent=self.panel1, pos=wx.Point(312, 143), size=wx.Size(136, 13),
+              parent=self.panel1, pos=wx.Point(312, 143), size=wx.Size(136, 25),
               style=0)
 
         self.staticText4 = wx.StaticText(id=wxID_FRAME1STATICTEXT4,
               label=u'\u592a\u9633\u4ef0\u89d2\uff1a', name='staticText4',
-              parent=self.panel1, pos=wx.Point(504, 119), size=wx.Size(60, 13),
+              parent=self.panel1, pos=wx.Point(504, 119), size=wx.Size(60, 25),
               style=0)
 
         self.staticText5 = wx.StaticText(id=wxID_FRAME1STATICTEXT5,
               label=u'\u592a\u9633\u65b9\u4f4d\uff1a', name='staticText5',
-              parent=self.panel1, pos=wx.Point(504, 164), size=wx.Size(60, 13),
+              parent=self.panel1, pos=wx.Point(504, 164), size=wx.Size(60, 20),
               style=0)
 
         self.textCtrl3 = wx.TextCtrl(id=wxID_FRAME1TEXTCTRL3, name='textCtrl3',
