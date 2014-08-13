@@ -2,7 +2,7 @@
 
 import time
 import datetime
-import math
+from math import *
 
 #print "====== Sun Angle ======"
 
@@ -50,23 +50,32 @@ def show_time(t):
 
 def get_sun(E, N, now=None):
 
+    print E
+    print N
+    print show_time(now)
+
     E = get_radians(E)
     N = get_radians(N)
     if not now:
         now = datetime.datetime.now()
 
-    #print E
-    #print N
-    #print show_time(now)
-
-    #now = now - datetime.timedelta(seconds=50)
 
     n = int(now.strftime("%j"))
+
+
+    A = [0.00020870, 0.0092869, -0.052258, -0.0013077, -0.0021867, -0.00015100]
+    B = [0, -0.12229, -0.15698, -0.0051602, -0.0029823, -0.00023463]
+    eot = [0, 0, 0, 0, 0, 0]
+    for k in range(1, 6):
+        eot[k-1]=A[k-1] * cos(2*pi*(k-1)*n/365.25)+B[k-1]*sin(2*pi*(k-1)*n/365.25)
+    eot2 = sum(eot)
+    # print "eot2:", eot2
+
 
     t_ping = now + datetime.timedelta(minutes=4*(E-120))
     #print show_time(t_ping)
 
-    t_zhen = t_ping - datetime.timedelta(minutes=15)
+    t_zhen = t_ping + datetime.timedelta(hours=eot2)
     #print show_time(t_zhen)
 
     t_bei = hours(now)
@@ -74,35 +83,47 @@ def get_sun(E, N, now=None):
     t_wei = 12 * (E - 120) / 180.0
     #print t_bei, t_delta, t_wei
 
-    t = (t_bei + t_delta + t_wei) * 180 / 12.0 - 180
+    #t = (t_bei + t_delta + t_wei) * 180 / 12.0 - 180
+    t = (t_delta-12) * 15;
     #print t
 
-    b = 23.45 * math.sin(2 * math.pi * (284 + n) / 365.0)
+    b = 23.45 * sin(2 * pi * (284 + n) / 365.0)
     #print b
 
-    sin_a = math.sin(math.radians(N)) * math.sin(math.radians(b)) + math.cos(math.radians(N)) * math.cos(math.radians(b)) * math.cos(math.radians(t))
-    #sin_a = math.sin(N) * math.sin(b) + math.cos(N) * math.cos(b) * math.cos(t)
+
+    sin_a = sin(radians(N)) * sin(radians(b)) + cos(radians(N)) * cos(radians(b)) * cos(radians(t))
     #print sin_a
 
-    a = math.asin(sin_a)
-    a = a * 180.0 / math.pi
-    a = u"%.3f°" % a 
+    a = asin(sin_a)
+    a = a * 180.0 / pi
 
-    tan_m = math.tan(math.radians(b)) / math.cos(math.radians(t))
-    m = math.atan(tan_m)
-    m = m * 180.0 / math.pi
+    tan_m = tan(radians(b)) / cos(radians(t))
+    m = atan(tan_m)
+    m = m * 180.0 / pi
 
-    tan_c = 0 - math.tan(math.radians(b)) * math.cos(math.radians(m)) * 1.0 / math.sin(math.radians(m-N)) 
-    c = math.atan(tan_c)
-    c = c * 180.0 / math.pi
+    # tan_c = 0 - tan(radians(b)) * cos(radians(m)) * 1.0 / sin(radians(m-N)) 
+    # c = atan(tan_c)
+    # c = c * 180.0 / pi
 
+    sin_c = cos(radians(b)) * sin(radians(t)) / cos(radians(a));
+    c = asin(sin_c);
+    c = c * 180.0 / pi
 
-    if m < N:
-        c = c + 180
+    # if m < N:
+    #     c = c + 180
+    # else:
+    #     if t > 0:
+    #         c = c + 360
+
+    print c
+
+    if t > 90:
+        c = 360 - c
     else:
-        if t > 0:
-            c = c + 360
+        c = 180 + c
 
+
+    a = u"%.3f°" % a 
     c = u"%.3f°" % c 
 
 
@@ -114,8 +135,12 @@ if __name__ == "__main__":
 
     E = u"110°18′21″"
     N = u"25°19′41″"
-    now = time.strptime("2014-08-08 16:46:00", "%Y-%m-%d %H:%M:%S")
     now = time.strptime("2014-08-11 10:50:00", "%Y-%m-%d %H:%M:%S")
+
+    # E = u"153°10′8″"
+    # N = u"55°10′8″"
+    # now = time.strptime("2014-08-13 16:10:53", "%Y-%m-%d %H:%M:%S")
+
     now = datetime.datetime.fromtimestamp(time.mktime(now))
 
     a, c = get_sun(E, N, now)

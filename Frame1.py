@@ -129,9 +129,6 @@ class Frame1(wx.Frame):
         print output
         
         
-        if self.n:
-            wx.MessageBox(u"测试版只可进行一次计算 若要再次计算请重新开启软件")
-            self.Destroy()
         self.n += 1
                     
         event.Skip()
